@@ -7,17 +7,8 @@ var uglify = require('gulp-uglify');
 var pkg = require('./package.json');
 var browserSync = require('browser-sync').create();
 
-// Set the banner content
-var banner = ['/*!\n',
-  ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
-  ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-  ' * Licensed under <%= pkg.license %> (https://github.com/BlackrockDigital/<%= pkg.name %>/blob/master/LICENSE)\n',
-  ' */\n',
-  ''
-].join('');
-
-// Copy third party libraries from /node_modules into /vendor
-gulp.task('vendor', function() {
+// Copy third party libraries, css, js, img and index.html into ../docs
+gulp.task('docs', function() {
 
   // Bootstrap
   gulp.src([
@@ -25,7 +16,7 @@ gulp.task('vendor', function() {
       '!./node_modules/bootstrap/dist/css/bootstrap-grid*',
       '!./node_modules/bootstrap/dist/css/bootstrap-reboot*'
     ])
-    .pipe(gulp.dest('./vendor/bootstrap'))
+    .pipe(gulp.dest('../docs/bootstrap'))
 
   // Devicons
   gulp.src([
@@ -37,7 +28,7 @@ gulp.task('vendor', function() {
       '!./node_modules/devicons/!SVG',
       '!./node_modules/devicons/!SVG/**/*'
     ])
-    .pipe(gulp.dest('./vendor/devicons'))
+    .pipe(gulp.dest('../docs/devicons'))
 
   // Font Awesome
   gulp.src([
@@ -47,32 +38,55 @@ gulp.task('vendor', function() {
       '!./node_modules/font-awesome/.*',
       '!./node_modules/font-awesome/*.{txt,json,md}'
     ])
-    .pipe(gulp.dest('./vendor/font-awesome'))
+    .pipe(gulp.dest('../docs/font-awesome'))
 
   // jQuery
   gulp.src([
       './node_modules/jquery/dist/*',
       '!./node_modules/jquery/dist/core.js'
     ])
-    .pipe(gulp.dest('./vendor/jquery'))
+    .pipe(gulp.dest('../docs/jquery'))
 
   // jQuery Easing
   gulp.src([
       './node_modules/jquery.easing/*.js'
     ])
-    .pipe(gulp.dest('./vendor/jquery-easing'))
+    .pipe(gulp.dest('../docs/jquery-easing'))
 
   // Simple Line Icons
   gulp.src([
       './node_modules/simple-line-icons/fonts/**',
     ])
-    .pipe(gulp.dest('./vendor/simple-line-icons/fonts'))
+    .pipe(gulp.dest('../docs/simple-line-icons/fonts'))
 
   gulp.src([
       './node_modules/simple-line-icons/css/**',
     ])
-    .pipe(gulp.dest('./vendor/simple-line-icons/css'))
+    .pipe(gulp.dest('../docs/simple-line-icons/css'))
 
+  // css 
+  gulp.src([
+      './css/*.min.css',
+    ])
+    .pipe(gulp.dest('../docs/css'))
+
+  // js 
+  gulp.src([
+      './js/*.min.js',
+    ])
+    .pipe(gulp.dest('../docs/js'))
+
+  // img 
+  gulp.src([
+      './img/*',
+    ])
+    .pipe(gulp.dest('../docs/img'))
+
+  // index.html
+  gulp.src([
+      './index.html',
+    ])
+    .pipe(gulp.dest('../docs/'))
 });
 
 // Compile SCSS
@@ -119,7 +133,7 @@ gulp.task('js:minify', function() {
 gulp.task('js', ['js:minify']);
 
 // Default task
-gulp.task('default', ['css', 'js', 'vendor']);
+gulp.task('default', ['css', 'js', 'docs']);
 
 // Configure the browserSync task
 gulp.task('browserSync', function() {
